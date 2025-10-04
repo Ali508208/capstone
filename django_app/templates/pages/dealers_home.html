@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dealers</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 960px;
+            margin: 32px auto;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .right {
+            margin-left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dealers</h1>
+
+    <div class="row">
+        <form method="get" action="">
+            <label>Filter by state:
+                <input type="text" name="state" value="{{ state|default_if_none:'' }}" placeholder="e.g. KS"
+                    style="width: 80px;" />
+            </label>
+            <button type="submit">Apply</button>
+            {% if state %}<a href="/">Clear</a>{% endif %}
+        </form>
+
+        <div class="right">
+            {% if request.user.is_authenticated %}
+            Logged in as <b>{{ request.user.username }}</b>
+            {% else %}
+            <a href="/admin/login/">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr />
+
+    {% if dealers %}
+    {% for d in dealers %}
+    <div class="card">
+        <div class="row">
+            <div>
+                <div><b>{{ d.name }}</b></div>
+                <div>{{ d.city }}, {{ d.state }}</div>
+                <div>{{ d.address }}</div>
+            </div>
+            <div class="right">
+                <a href="{% url 'dealer_detail' d.id %}">Details</a>
+                {% if request.user.is_authenticated %}
+                &nbsp;|&nbsp;
+                <a href="{% url 'post_review' d.id %}">Post Review</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No dealers found.</p>
+    {% endif %}
+</body>
+
+</html>

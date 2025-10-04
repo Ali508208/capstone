@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Home | My Django App{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1>Welcome to MySite</h1>
+    <p class="lead">A simple, clean Django project template.</p>
+    <a href="{% url 'about' %}" class="btn btn-primary">Learn More</a>
+</div>
+{% endblock %}

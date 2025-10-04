@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Post Review</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 680px;
+            margin: 32px auto;
+        }
+
+        label {
+            display: block;
+            margin: 8px 0;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url 'dealer_detail' dealer_id %}">← Back to Dealer</a>
+    <h1>Post Review</h1>
+
+    {% if error %}<p style="color:crimson">{{ error }}</p>{% endif %}
+
+    <form method="post" action="{% url 'post_review' dealer_id %}">
+        {% csrf_token %}
+        <label>
+            Rating (1–5)
+            <input type="number" name="rating" min="1" max="5" value="{{ request.POST.rating|default:'5' }}" required />
+        </label>
+
+        <label>
+            Review
+            <textarea name="reviewText" rows="5" required>{{ request.POST.reviewText }}</textarea>
+        </label>
+
+        <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" name="purchase" {% if request.POST.purchase %}checked{% endif %} />
+            I purchased a vehicle from this dealer
+        </label>
+
+        <label>
+            Purchase Date
+            <input type="date" name="purchaseDate" value="{{ request.POST.purchaseDate }}">
+        </label>
+
+        <button type="submit">Submit Review</button>
+    </form>
+</body>
+
+</html>
